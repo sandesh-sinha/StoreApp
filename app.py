@@ -3,7 +3,6 @@ from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from resources.user import UserRegister,User, Userlogin, TokenRefresh, Logout
 from resources.item import Item, ItemList
-from db import db
 from resources.store import Store, StoreList
 from blacklist import Blacklist
 
@@ -16,12 +15,6 @@ app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = {'access', 'refresh'}
 
 app.secret_key = 'secret'
 api = Api(app)
-
-
-@app.before_first_request
-def create_tables():
-    db.create_all()
-
 
 jwt = JWTManager(app) 
 
@@ -68,5 +61,4 @@ api.add_resource(TokenRefresh, '/refresh')
 api.add_resource(Logout, '/logout')
 
 if __name__ == '__main__':
-    db.init_app(app)
     app.run(port=5000, debug=True)

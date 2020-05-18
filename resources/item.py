@@ -12,7 +12,7 @@ class Item(Resource):
         'store_id', type = int, required= True, help = "This is necessary field"
     )
 
-    @jwt_required
+    @jwt_required()
     def get(self, name):
         item = ItemModel.find_by_name(name)
         if item is not None:
@@ -20,7 +20,7 @@ class Item(Resource):
         else:
             return {'message':'Item not found'},404
 
-    @fresh_jwt_required
+    @fresh_jwt_required()
     def post(self,name):
         item = ItemModel.find_by_name(name)
         if item is not None:
@@ -35,7 +35,7 @@ class Item(Resource):
 
         return newitem.json(),201
 
-    @jwt_required
+    @jwt_required()
     def delete(self, name):
         claims = get_jwt_claims()
         if not claims['is_admin']:
@@ -56,7 +56,7 @@ class Item(Resource):
         return item.json()
         
 class ItemList(Resource):
-    @jwt_optional
+    @jwt_optional()
     def get(self):
         user_id = get_jwt_identity()
         items = [item.json() for item in ItemModel.find_all()]
